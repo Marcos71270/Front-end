@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Conversor from './Conversor'
+import Usuarios from './Usuarios'
+import Registro from './registro'
+
 
 function App() {
   const [usuario, SetUsuario] = useState('')
   const [clave, SetClave] = useState('')
   const [logueado, setLogueado] = useState(false)
+  const [recargar, setRecargar] = useState(false)
+
 
   function cambiarUsuario(evento) {
     SetUsuario(evento.target.value)
@@ -17,34 +20,39 @@ function App() {
     SetClave(evento.target.value)
   }
 
+  function recargarAhora() {
+    setRecargar(!recargar)
+    
+  }
+
   async function ingresar() {
-    const peticion = await fetch ('http://localhost:3000/login?usuario='+ usuario + '&clave=' + clave,{credentials:'include'})
+    const peticion = await fetch('http://localhost:3000/login?usuario=' + usuario + '&clave=' + clave, { credentials: 'include' })
     if (peticion.ok) {
-      setLogueado(true)
-    }else{
+      setLogueado(true);
+    } else {
       alert('Usuario o clave incorrecta')
     }
-    // if (usuario == 'admin' && clave == 'admin') {
-    //   alert('Ingresaste')
-    //   setLogueado(true)
-    // } else {
-    //   alert('Usuario o clave incorrectos')
-    // }
   }
 
   async function validar() {
-    const peticion = await fetch ('http://localhost:3000/validar',{ credentials: 'include'})
+    const peticion = await fetch('http://localhost:3000/validar', { credentials: 'include' })
     if (peticion.ok) {
       setLogueado(true)
-    }      
+    }
   }
 
-useEffect(()=>{
-  validar()
-}, [])
+  useEffect(() => {
+    validar()
+  }, [])
 
   if (logueado) {
-    return <Conversor />
+    return (
+
+      <>
+        <Registro recargarAhora ={recargarAhora} />
+        <Conversor />
+        <Usuarios recargar ={recargar}/> 
+      </>)
   }
 
   return (
@@ -53,6 +61,8 @@ useEffect(()=>{
       < input placeholder='Usuario' type="text" name="usuario" id="usuario" value={usuario} onChange={cambiarUsuario} />
       <input placeholder='Clave' type="password" name="clave" id="clave" value={clave} onChange={cambiarClave} />
       <button onClick={ingresar}>Ingresar</button>
+
+
     </>
   )
 }
