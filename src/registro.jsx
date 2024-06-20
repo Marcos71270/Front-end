@@ -14,7 +14,7 @@ function Registro({recargarAhora}) {
     SetClaveRegistro(evento.target.value) }
 
   async function regsitrar() {
-    const peticion = await fetch('http://localhost:3000/registro?usuario=' + usuarioRegistro + '&clave=' + claveRegistro, { credentials: 'include' })
+    const peticion = await fetch(import.meta.env.VITE_HOSTBACKEND + '/registro?usuario=' + usuarioRegistro + '&clave=' + claveRegistro, { credentials: 'include' })
     if (peticion.ok) {
       alert('Usuario registrado')  
       recargarAhora()       
